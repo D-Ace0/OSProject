@@ -1,4 +1,4 @@
-package code;
+package code.OSProject;
 
 public class PCB {
     int processID;
