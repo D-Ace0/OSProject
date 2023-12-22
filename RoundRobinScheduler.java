@@ -18,19 +18,21 @@ public class RoundRobinScheduler {
     public static void roundRobin(List<PCB> processes, int timeQuantum) {
         Queue<PCB> queue = new LinkedList<>(processes);
 
-        System.out.println("Order of execution:");
+        System.out.println("Gantt chart:-");
+        int c = 0;
 
         while (!queue.isEmpty()) {
             PCB currentProcess = queue.poll();
-
             if (currentProcess.getBurstTime() > timeQuantum) {
-                System.out.println("Process " + currentProcess.getProcessID() + " executes from " +
-                        "time " + currentProcess.getBurstTime() + " to " + (currentProcess.getBurstTime() - timeQuantum));
+            	System.out.println("Process "+currentProcess.getProcessID() + " executes from "
+            			+ "time " + (c) + " to " + (c + timeQuantum));
                 currentProcess.setBurstTime(currentProcess.getBurstTime() - timeQuantum);
                 queue.offer(currentProcess);
+                c += timeQuantum;
             } else {
                 System.out.println("Process " + currentProcess.getProcessID() + " executes from " +
-                        "time " + currentProcess.getBurstTime() + " to 0");
+                        "time " + (c) + " to " + (c + currentProcess.getBurstTime()));
+                c += currentProcess.getBurstTime();
             }
         }
         System.out.println("[+] Process Finished");

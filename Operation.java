@@ -12,7 +12,7 @@ import java.util.Map;
 public class Operation extends PCB{
     private Map<String, Double> variables= new HashMap<>();
     
-    public Operation(int burstTime, int Pid) {
+    public Operation(int Pid, int burstTime) {
     	super(Pid, burstTime);
     }
 
@@ -89,6 +89,12 @@ public class Operation extends PCB{
                 		String var1 = tokens[2];
                 		operation.assign(main,var1, op);
                 	}
+                }
+                else if(tokens.length == 4) {
+                	String main = tokens[1];
+                	String op = tokens[2];
+                	String var1 = tokens[3];
+                	operation.assign(main,var1, op);
                 }
             }
             
