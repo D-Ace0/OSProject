@@ -1,3 +1,0 @@
-assign a input
-assign b input
-writeFile a b

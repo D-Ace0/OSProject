@@ -1,6 +1,8 @@
 package code.OSProject;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +20,8 @@ public class Operation extends PCB{
                 readInput(main);
                 break;
             case "writeFile":
-            	
+            	writeFile(main, variable1);
+            	break;
             case "print":
             	print(main);
             	break;
@@ -51,14 +54,13 @@ public class Operation extends PCB{
         assign(main, "", "", operation);
     }
 
-    private void assign(String main, String var1, String op) {
+    public void assign(String main, String var1, String op) {
     	assign(main,var1,"", op);
 	}
 
-    public static void readTxt(Operation operation, String filepath) {
-        File file = new File(filepath);
+    public static void readTxt(Operation operation, String filename) {
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(getResourceFile(filename)))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split(" ");
@@ -93,14 +95,54 @@ public class Operation extends PCB{
             e.printStackTrace();
         }
     }
+    private static File getResourceFile(String filename) {
+        ClassLoader classLoader = Operation.class.getClassLoader();
+        try {
+            // Replace spaces with %20 in the URI
+            URI uri = classLoader.getResource(filename).toURI();
+            return new File(uri);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     
+    public void writeFile(String file1, String file2) {
+        try {
+            File outputFile1 = new File(file1+".txt");
+            System.out.println("Writing to file: " + outputFile1.getAbsolutePath());
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile1))) {
+                writer.write(getVariableValue(file1) + "");
+                System.out.println("Contents written to file: " + file1);
+            } catch (IOException e) {
+                System.out.println("Error writing to file: " + file1);
+                e.printStackTrace();
+            }
+
+            File outputFile2 = new File(file2+".txt");
+            System.out.println("Writing to file: " + outputFile2.getAbsolutePath());
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile2))) {
+                writer.write(getVariableValue(file2) + "");
+                System.out.println("Contents written to file: " + file2);
+            } catch (IOException e) {
+                System.out.println("Error writing to file: " + file2);
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 
-	private double getVariableValue(String variable) {
+	public double getVariableValue(String variable) {
         return variables.getOrDefault(variable, 0.0);
     }
 
-    private void readInput(String variable) {
+    public void readInput(String variable) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print("Enter value for " + variable + ": ");
@@ -120,7 +162,7 @@ public class Operation extends PCB{
     public static void main(String[] args) {
         Operation operation = new Operation(0, 0);
 
-        readTxt(operation, "G:\\OS project\\code\\OS\\src\\code\\OSProject\\Program_1.txt");
+        readTxt(operation, "Program_1.txt");
 	}
 
     
