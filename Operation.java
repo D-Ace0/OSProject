@@ -1,7 +1,6 @@
 package code.OSProject;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -203,14 +202,18 @@ public class Operation extends PCB{
 	public static void useRoundRobin(List<PCB> opList) {
 	    	RoundRobinScheduler.roundRobin(opList, 2);
 	}
+	
+	public static void useSJF(List<PCB> opList) {
+    	ShortestJobFirst.shortestJobFirst(opList);
+}
     public static void main(String[] args) {
-        Operation operation1 = new Operation(1, 2);
+        Operation operation1 = new Operation(1, 4);
         readTxt(operation1, "Program_1.txt");
         
-        Operation operation2 = new Operation(2, 4);
+        Operation operation2 = new Operation(2, 2);
         readTxt(operation2, "Program_2.txt");
         
-        Operation operation3 = new Operation(3, 6);
+        Operation operation3 = new Operation(3, 7);
         readTxt(operation3, "Program_3.txt");
 
         List<PCB> li = new ArrayList<>();
@@ -218,7 +221,13 @@ public class Operation extends PCB{
         li.add(operation2);
         li.add(operation3);
         
-        useRoundRobin(li);
+        System.out.println("---------------------------");
+        
+//        useRoundRobin(li);
+        
+        System.out.println("---------------------------");
+        
+        useSJF(li);
 	}
 
     

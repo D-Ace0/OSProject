@@ -1,6 +1,5 @@
 package code.OSProject;
 
-import java.net.URL;
 
 public class PCB {
     int processID;

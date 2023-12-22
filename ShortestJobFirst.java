@@ -18,11 +18,13 @@ public class ShortestJobFirst {
 
         int currentTime = 0;
 
-        System.out.println("Order of execution:");
+        System.out.println("Shortest Job First:");
 
         for (PCB pcb : processes) {
             System.out.println("Process " + pcb.processID + " executes from " + currentTime + " to " + (currentTime + pcb.burstTime));
             currentTime += pcb.burstTime;
         }
+        System.out.println("[+] Process Finished Using SJF");
+
     }
 }

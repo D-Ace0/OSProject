@@ -35,6 +35,6 @@ public class RoundRobinScheduler {
                 c += currentProcess.getBurstTime();
             }
         }
-        System.out.println("[+] Process Finished");
+        System.out.println("[+] Process Finished Using Round Robin");
     }
 }
