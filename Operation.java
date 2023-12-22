@@ -3,7 +3,9 @@ package code.OSProject;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -158,11 +160,25 @@ public class Operation extends PCB{
         System.out.println(varname + ": " + getVariableValue(varname));
     }
     
-
+	public static void useRoundRobin(List<PCB> opList) {
+	    	RoundRobinScheduler.roundRobin(opList, 2);
+	}
     public static void main(String[] args) {
-        Operation operation = new Operation(0, 0);
+        Operation operation1 = new Operation(1, 2);
+        readTxt(operation1, "Program_1.txt");
+        
+        Operation operation2 = new Operation(2, 4);
+        readTxt(operation2, "Program_2.txt");
+        
+        Operation operation3 = new Operation(3, 6);
+        readTxt(operation3, "Program_3.txt");
 
-        readTxt(operation, "Program_1.txt");
+        List<PCB> li = new ArrayList<>();
+        li.add(operation1);
+        li.add(operation2);
+        li.add(operation3);
+        
+        useRoundRobin(li);
 	}
 
     
