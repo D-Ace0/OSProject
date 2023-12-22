@@ -3,6 +3,7 @@ package code.OSProject;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ public class Operation extends PCB{
     public Operation(int Pid, int burstTime) {
     	super(Pid, burstTime);
     }
-
+    
     public void assign(String main,String variable1,String variable2, String operation) {
         switch (operation) {
             case "input":
@@ -23,6 +24,10 @@ public class Operation extends PCB{
                 break;
             case "writeFile":
             	writeFile(main, variable1);
+            	break;
+            case "readFile":
+            	double readF = readFile(variable1);
+            	variables.put(main, readF);
             	break;
             case "print":
             	print(main);
@@ -103,22 +108,51 @@ public class Operation extends PCB{
             e.printStackTrace();
         }
     }
+    
+    private double readFile(String filename) {
+        File file = new File(System.getProperty("user.dir")+ File.separator +"bin", filename+".txt");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            return Double.parseDouble(line.trim());
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Error reading file: " + filename);
+            e.printStackTrace();
+        }
+
+        return 0.0;
+    }
+
+
+
+
     private static File getResourceFile(String filename) {
         ClassLoader classLoader = Operation.class.getClassLoader();
-        try {
-            // Replace spaces with %20 in the URI
-            URI uri = classLoader.getResource(filename).toURI();
-            return new File(uri);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return null;
+        URL resourceUrl = classLoader.getResource(filename);
+
+        if (resourceUrl != null) {
+            try {
+                String filePath = resourceUrl.toURI().getPath();
+                if (filename.length() == 1) {
+                    filePath = new File(".").getAbsolutePath() + File.separator + filename;
+                }
+
+                return new File(filePath);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Error: Resource not found - " + filename);
         }
+
+        return null;
     }
+
 
     
     public void writeFile(String file1, String file2) {
         try {
-            File outputFile1 = new File(file1+".txt");
+            File outputFile1 = new File("bin"+ File.separator + file1 + ".txt");
             System.out.println("Writing to file: " + outputFile1.getAbsolutePath());
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile1))) {
@@ -129,7 +163,7 @@ public class Operation extends PCB{
                 e.printStackTrace();
             }
 
-            File outputFile2 = new File(file2+".txt");
+            File outputFile2 = new File("bin"+ File.separator + file2 + ".txt");
             System.out.println("Writing to file: " + outputFile2.getAbsolutePath());
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile2))) {

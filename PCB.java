@@ -1,5 +1,7 @@
 package code.OSProject;
 
+import java.net.URL;
+
 public class PCB {
     int processID;
     int burstTime;
@@ -25,6 +27,5 @@ public class PCB {
 	public void setBurstTime(int burstTime) {
 		this.burstTime = burstTime;
 	}
-
 
 }
